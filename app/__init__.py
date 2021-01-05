@@ -53,5 +53,26 @@ def create_app(test_config=None):
                 mimetype='application/json'
             )
             return response
-
+    @app.route('/skills', methods=['GET'])
+    def skills():
+        query = request.args.get("query")
+        url = "http://api.dataatwork.org/v1/skills/autocomplete?contains=%22" + query + "%22"
+        getskills = requests.get(url)
+        if getskills:
+            response = app.response_class(
+                response=getskills,
+                status=200,
+                mimetype='application/json'
+            )
+            return response
+        else:
+            response = app.response_class(
+                response=json.dumps({
+                    "message": "API Request failed!"
+                }),
+                status=500,
+                mimetype='application/json'
+            )
+            return response
+            
     return app
