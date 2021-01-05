@@ -6,6 +6,8 @@ from flask import (
     request, json
 )
 
+import requests
+
 
 def create_app(test_config=None):
     # create and configure the app
@@ -29,11 +31,11 @@ def create_app(test_config=None):
         pass
     
     # import blueprint(s)
-
     from . import linkedin
+    from . import github
 
     app.register_blueprint(linkedin.bp)
-
+    app.register_blueprint(github.bp)
 
     # routes
     @app.route('/')
@@ -43,12 +45,10 @@ def create_app(test_config=None):
     @app.route('/jobs', methods=('GET', 'POST'))
     def jobs():
         if request.method == 'GET':
-            newdict = {
-                "jobs": "list",
-                "spam": "egg"
-            }
+            getjobs = requests.get("http://api.dataatwork.org/v1/jobs/autocomplete?contains=%22web%22")
+            print(getjobs)
             response = app.response_class(
-                response=json.dumps(newdict),
+                response=getjobs,
                 status=200,
                 mimetype='application/json'
             )

@@ -20,3 +20,14 @@ def get():
             mimetype='application/json'
         )
         return response
+
+@bp.route('/user', methods=('GET', 'POST'))
+def user():
+    response = Response(
+        response=json.dumps({
+            "user": "token"
+        }),
+        status=200,
+        mimetype='application/json'
+    )
+    return response
